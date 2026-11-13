@@ -1,0 +1,372 @@
+<title>XQUISIT OS</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: left rail nav + scrolling workspace; rail becomes a horizontal tab strip on phones. Single dark look by design (her brand). */
+:root{
+  color-scheme:dark;
+  --bg:#070707; --s1:#0F0F0F; --s2:#151515; --s3:#1d1c1a; --line:#2a2823; --line2:#3a362c;
+  --gold:#AF9B60; --gold2:#C4BC96; --fg:#F6F3EC; --white:#FFFFFF; --muted:#BEB9AD; --dim:#8a857a;
+  --red:#E07A6B; --amber:#E2B65A; --green:#7FBF8E; --blue:#8FB2D9;
+  --display:"Montserrat","Century Gothic","Avenir Next",system-ui,sans-serif;
+  --body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:14px;line-height:1.5}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
+.app{display:grid;grid-template-columns:232px 1fr;min-height:100%}
+.rail{background:var(--s1);border-right:1px solid var(--line);padding:22px 14px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:0 6px}
+.brand svg{flex:none}
+.wordmark{font-family:var(--display);font-weight:600;letter-spacing:.18em;font-size:11px;color:var(--fg);line-height:1.3}
+.wordmark b{display:block;font-size:15px;letter-spacing:.12em;color:var(--white)}
+nav{display:flex;flex-direction:column;gap:2px}
+nav button{display:flex;align-items:center;justify-content:space-between;gap:8px;background:none;border:0;text-align:left;padding:9px 10px;border-radius:8px;color:var(--muted);font-size:13.5px}
+nav button:hover{background:var(--s2);color:var(--fg)}
+nav button[aria-current="page"]{background:var(--s3);color:var(--white);box-shadow:inset 2px 0 0 var(--gold)}
+.count{font-size:11px;font-variant-numeric:tabular-nums;min-width:20px;text-align:center;padding:1px 6px;border-radius:99px;border:1px solid var(--gold);color:var(--gold2)}
+.rail-foot{margin-top:auto;font-size:12px;color:var(--dim);padding:0 6px}
+.demo-tag{display:inline-block;font-size:10px;letter-spacing:.16em;font-weight:600;color:var(--bg);background:var(--gold2);padding:2px 7px;border-radius:4px}
+main{min-width:0;padding-block:26px 60px;padding-left:max(28px,env(safe-area-inset-left,0px));padding-right:max(28px,env(safe-area-inset-right,0px))}
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;margin-bottom:22px}
+.eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600}
+h1{font-family:var(--display);font-weight:600;font-size:26px;letter-spacing:.02em;margin:4px 0 0;color:var(--white);text-wrap:balance}
+h2{font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.16em;text-transform:uppercase;margin:0;color:var(--fg)}
+.ask{display:flex;gap:8px;flex:1 1 320px;max-width:520px}
+.ask input{flex:1;min-width:0;background:var(--s1);border:1px solid var(--line2);border-radius:99px;padding:10px 16px;color:var(--fg);font:inherit}
+.ask input::placeholder{color:var(--dim)}
+.btn{border:1px solid var(--gold);background:none;color:var(--gold2);border-radius:99px;padding:8px 16px;font-size:13px;font-weight:500;white-space:nowrap}
+.btn:hover{background:rgba(175,155,96,.12);color:var(--white)}
+.btn.solid{background:var(--gold);color:#0b0a08;border-color:var(--gold)}
+.btn.solid:hover{background:var(--gold2)}
+.btn.ghost{border-color:var(--line2);color:var(--muted)}
+.btn.sm{padding:5px 12px;font-size:12px}
+.grid{display:grid;gap:16px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.card{background:linear-gradient(180deg,#151514,#101010);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0;position:relative}
+.card.hair::before{content:"";position:absolute;left:18px;right:18px;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.kpi .label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.kpi .val{font-family:var(--display);font-size:26px;font-weight:600;color:var(--white);margin-top:6px;font-variant-numeric:tabular-nums}
+.kpi .sub{font-size:12px;color:var(--dim);margin-top:2px}
+.kpi .val.gold{color:var(--gold2)}
+.two{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.list{display:flex;flex-direction:column}
+.row{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row .t{font-weight:500;color:var(--fg)}
+.row .d{font-size:12.5px;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--dim)}
+.dot.red{background:var(--red)}.dot.amber{background:var(--amber)}.dot.green{background:var(--green)}.dot.blue{background:var(--blue)}.dot.gold{background:var(--gold)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;padding:2px 9px;border-radius:99px;border:1px solid var(--line2);color:var(--muted);white-space:nowrap}
+.pill.red{border-color:rgba(224,122,107,.5);color:var(--red)}
+.pill.amber{border-color:rgba(226,182,90,.5);color:var(--amber)}
+.pill.green{border-color:rgba(127,191,142,.5);color:var(--green)}
+.pill.blue{border-color:rgba(143,178,217,.5);color:var(--blue)}
+.pill.gold{border-color:var(--gold);color:var(--gold2)}
+.brief{font-size:14px;color:var(--fg);max-width:68ch}
+.brief p{margin:0 0 10px}
+.brief strong{color:var(--gold2);font-weight:600}
+.alert{display:flex;gap:14px;align-items:flex-start;border:1px solid rgba(226,182,90,.45);background:rgba(226,182,90,.06);border-radius:14px;padding:14px 16px;margin-bottom:16px}
+.alert .big{font-family:var(--display);font-size:30px;font-weight:700;color:var(--amber);line-height:1;font-variant-numeric:tabular-nums}
+.alert .big small{display:block;font-size:10px;letter-spacing:.16em;font-weight:600;margin-top:4px}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+th{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);font-weight:600;text-align:left;padding:8px 10px;border-bottom:1px solid var(--line2);white-space:nowrap}
+td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+td.num,th.num{text-align:right}
+tr:hover td{background:rgba(255,255,255,.015)}
+.approval{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--s1);display:flex;flex-direction:column;gap:10px}
+.approval .meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:12px;color:var(--muted)}
+.approval .draft{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;white-space:pre-wrap;color:var(--fg);max-height:180px;overflow:auto}
+.approval textarea{width:100%;min-height:150px;background:var(--bg);border:1px solid var(--gold);border-radius:10px;padding:12px 14px;color:var(--fg);font:inherit;font-size:13px}
+.approval .why{font-size:12px;color:var(--dim)}
+.approval .why a{color:var(--gold2)}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+.done{opacity:.55}
+.toggle{display:inline-flex;border:1px solid var(--line2);border-radius:99px;overflow:hidden}
+.toggle button{background:none;border:0;padding:5px 11px;font-size:11.5px;color:var(--dim)}
+.toggle button[aria-pressed="true"]{background:var(--gold);color:#0b0a08;font-weight:600}
+.toggle button:disabled{cursor:not-allowed;opacity:.35}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.lane{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.lane h3{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 2px;font-weight:600;display:flex;justify-content:space-between}
+.tile{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:11px 12px;font-size:13px;display:flex;flex-direction:column;gap:4px}
+.tile .d{font-size:12px;color:var(--muted)}
+.bar{height:6px;border-radius:99px;background:var(--s3);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--gold)}
+.post{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--s1);display:flex;flex-direction:column}
+.post .img{aspect-ratio:4/3;max-width:100%;background:radial-gradient(120% 90% at 30% 20%,#2a2620,#0c0c0b);display:grid;place-items:center;border-bottom:1px solid var(--line)}
+.post .img span{font-family:var(--display);letter-spacing:.24em;font-size:12px;color:var(--gold2);font-weight:600;text-align:center;padding:0 12px}
+.post .body{padding:12px 14px;display:flex;flex-direction:column;gap:8px;font-size:13px}
+.toast{position:fixed;right:max(20px,env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--s3);border:1px solid var(--gold);color:var(--fg);padding:10px 16px;border-radius:99px;font-size:13px;z-index:20}
+.answer{margin-top:14px;border-left:2px solid var(--gold);padding:4px 0 4px 14px;color:var(--fg);font-size:13.5px}
+.muted{color:var(--muted)}.dim{color:var(--dim)}
+.gap{height:16px}
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .rail{position:sticky;top:env(safe-area-inset-top,0px);height:auto;z-index:5;flex-direction:row;align-items:center;gap:12px;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));border-right:0;border-bottom:1px solid var(--line);overflow-x:auto}
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--s1)}
+  .wordmark,.rail-foot{display:none}
+  nav{flex-direction:row;gap:4px}
+  nav button{white-space:nowrap;padding:7px 10px}
+  nav button[aria-current="page"]{box-shadow:inset 0 -2px 0 var(--gold)}
+  .two{grid-template-columns:1fr}
+  main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  h1{font-size:22px}
+}
+@media (prefers-reduced-motion:no-preference){.card,.approval{transition:opacity .25s}}
+</style>
+
+<div class="app">
+  <aside class="rail">
+    <div class="brand" aria-label="XQUISIT Property Group">
+      <svg width="40" height="40" viewBox="0 0 64 64" aria-hidden="true">
+        <g fill="none" stroke-linecap="square">
+          <path d="M8 8 L32 32 L8 56" stroke="#AF9B60" stroke-width="7"/>
+          <path d="M20 8 L44 32 L20 56" stroke="#C4BC96" stroke-width="3" opacity=".75"/>
+          <path d="M56 8 L32 32 L56 56" stroke="#AF9B60" stroke-width="7"/>
+          <path d="M44 8 L20 32 L44 56" stroke="#C4BC96" stroke-width="3" opacity=".75"/>
+        </g>
+      </svg>
+      <div class="wordmark"><b>QUISIT</b>PROPERTY GROUP</div>
+    </div>
+    <nav id="nav" aria-label="Sections"></nav>
+    <div class="rail-foot"><span class="demo-tag">DEMO</span><p>Sample data only. No real clients, no messages are sent.</p></div>
+  </aside>
+  <main id="main"></main>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const TODAY = new Date(2026,10,13); // Fri 13 Nov 2026
+const INSUL_DEADLINE = new Date(2026,10,30);
+const daysTo = d => Math.round((d - TODAY)/86400000);
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const money = n => "$"+n.toLocaleString("en-AU");
+
+/* ---------- DEMO DATA (invented) ---------- */
+const props = [
+  {id:1,addr:"14 Mugga Way, Red Hill",owner:"M. & R. Chen",tenant:"S. Patel",rent:950,leaseEnd:"2027-03-02",arrears:0,insul:"Complies",eer:"6.0",insp:"2026-12-03"},
+  {id:2,addr:"7/22 Franklin St, Griffith",owner:"D. Okafor",tenant:"J. Walsh",rent:580,leaseEnd:"2027-01-19",arrears:1160,insul:"Unknown",eer:"4.5",insp:"2026-11-25"},
+  {id:3,addr:"31 Arthur Cct, Forrest",owner:"P. Nguyen",tenant:"L. & K. Moore",rent:1250,leaseEnd:"2026-12-18",arrears:0,insul:"Complies",eer:"5.5",insp:"2027-01-14"},
+  {id:4,addr:"3 Throsby St, Kingston",owner:"A. Rossi",tenant:"T. Hughes",rent:720,leaseEnd:"2027-06-30",arrears:360,insul:"Not compliant",eer:"3.0",insp:"2026-11-20"},
+  {id:5,addr:"18 Monaro Cres, Red Hill",owner:"G. Fraser",tenant:"Vacant",rent:880,leaseEnd:"",arrears:0,insul:"Exempt (heritage)",eer:"2.5",insp:""},
+  {id:6,addr:"12/40 Eyre St, Kingston",owner:"H. Ward",tenant:"B. Silva",rent:640,leaseEnd:"2027-02-08",arrears:0,insul:"Exempt (lower floor)",eer:"6.5",insp:"2027-02-01"},
+  {id:7,addr:"9 Canterbury Cres, Deakin",owner:"M. & R. Chen",tenant:"E. Kowalski",rent:820,leaseEnd:"2027-04-11",arrears:0,insul:"Unknown",eer:"",insp:"2026-12-09"},
+  {id:8,addr:"44 Stonehaven Cres, Deakin",owner:"S. Ibrahim",tenant:"R. Taylor",rent:1100,leaseEnd:"2027-08-22",arrears:0,insul:"Complies",eer:"7.0",insp:"2027-01-28"},
+];
+
+let approvals = [
+  {id:"a1",agent:"Arrears",kind:"SMS",to:"J. Walsh · 7/22 Franklin St",urgency:"red",
+   why:"Rent 14 days overdue ($1,160). Friendly reminder 2. Formal notice step stays off until the arrears rule is verified.",src:"Residential Tenancies Act 1997 (ACT)",
+   text:"Hi Jordan, it's Tatijana from XQUISIT. Our records show $1,160 rent outstanding for 7/22 Franklin St, due since 30 October. If something has come up, call me on 0414 451 480 and we can talk about a payment plan. Otherwise please pay by Tuesday. Thanks, Tatijana",auto:false},
+  {id:"a2",agent:"Compliance",kind:"Email",to:"A. Rossi · owner, 3 Throsby St",urgency:"amber",
+   why:"Ceiling insulation is below R2. Existing tenancies must comply by 30 Nov 2026. Two installer quotes attached.",src:"act.gov.au minimum ceiling insulation standard",
+   text:"Dear Antonio,\n\nThe ACT minimum ceiling insulation standard requires 3 Throsby St to have at least R5 ceiling insulation by 30 November 2026. The last inspection found the existing insulation is below R2.\n\nI have two quotes from certified installers ($2,140 and $2,380, both including the electrical safety check). If you approve the lower quote today, the work can be done on 24 November and the tenant has been told about access.\n\nReply 'approved' and I will book it.\n\nKind regards,\nTatijana Stevanovic\nXQUISIT Property Group",auto:false},
+  {id:"a3",agent:"Inspections",kind:"Entry notice",to:"T. Hughes · 3 Throsby St",urgency:"blue",
+   why:"Routine inspection 20 Nov. Written notice needs at least 1 week, weekday 8am–6pm. Earliest valid date: 20 Nov.",src:"act.gov.au during a tenancy",
+   text:"Dear Tom,\n\nThis is written notice of a routine inspection at 3 Throsby St, Kingston on Friday 20 November 2026 between 10:00am and 11:00am.\n\nYou are welcome to be present. Please let me know if you have any maintenance items you would like me to look at.\n\nTatijana Stevanovic\nXQUISIT Property Group",auto:false},
+  {id:"a4",agent:"Renewals",kind:"Email",to:"P. Nguyen · owner, 31 Arthur Cct",urgency:"amber",
+   why:"Lease ends 18 Dec. Recommends renewing for 12 months at $1,280 a week. Cap check: +2.4%, within the Canberra rents CPI limit (demo figure).",src:"act.gov.au rent increases",
+   text:"Dear Phuong,\n\nThe lease at 31 Arthur Cct ends on 18 December. The Moores have paid on time every week and asked to stay.\n\nI recommend a new 12-month lease at $1,280 a week (up from $1,250). Three comparable Forrest homes leased in the last 60 days for $1,260 to $1,340.\n\nShall I offer this to the tenants?\n\nTatijana",auto:false},
+  {id:"a5",agent:"Marketing",kind:"Instagram",to:"@tatijana_xquisit",urgency:"gold",
+   why:"New lease at 18 Monaro Cres. Ad includes the EER and insulation statements required for rental ads.",src:"Brand voice: approved examples",
+   text:"FOR LEASE · 18 Monaro Crescent, Red Hill\n\nA heritage-listed four-bedroom home on a quiet Red Hill crescent, a short walk to Manuka.\n\n$880 per week · Available 1 December\nEER 2.5 stars · Ceiling insulation: exempt (heritage listing)\n\nBook a viewing at the link in bio.\n#Canberra #RedHill #ForLease #XquisitPropertyGroup",auto:false},
+  {id:"a6",agent:"Inbox",kind:"Email reply",to:"Buyer enquiry · L. Barnes",urgency:"green",
+   why:"Buyer asked for the contract for 22 Hopetoun Cct. Reply attaches the contract and EER statement.",src:"Learned from 37 approved replies",
+   text:"Hi Lauren,\n\nThanks for coming through on Saturday. Please find the contract for 22 Hopetoun Circuit attached, including the building and pest report and the EER statement.\n\nHappy to talk through anything. Offers are being considered from Wednesday.\n\nTatijana",auto:true},
+];
+
+const maint = [
+  {lane:"New",items:[{t:"Hot water system not working",p:"14 Mugga Way",tag:"Urgent repair",c:"red"},{t:"Dripping laundry tap",p:"9 Canterbury Cres",tag:"Routine",c:"blue"}]},
+  {lane:"Quoting",items:[{t:"Fence panel blown down",p:"44 Stonehaven Cres",tag:"2 of 3 quotes in",c:"amber"}]},
+  {lane:"Owner approval",items:[{t:"Ceiling insulation upgrade",p:"3 Throsby St",tag:"$2,140 · over owner limit",c:"amber"}]},
+  {lane:"Booked",items:[{t:"Gutter clean",p:"31 Arthur Cct",tag:"Tue 17 Nov · CanGutter",c:"green"},{t:"Smoke alarm service",p:"12/40 Eyre St",tag:"Wed 18 Nov · SafeHome",c:"green"}]},
+  {lane:"Done, invoice in",items:[{t:"Oven element replaced",p:"8 · 44 Stonehaven",tag:"$310 · bill matched",c:"gold"}]},
+];
+
+const pipeline = [
+  {lane:"Appraisals",items:[{t:"22 La Perouse St, Griffith",d:"Owner downsizing · booked Tue"},{t:"5 Flinders Way, Manuka",d:"Referral from past client"}]},
+  {lane:"Listed",items:[{t:"22 Hopetoun Cct, Yarralumla",d:"14 enquiries · 31 at opens"},{t:"8/2 Bougainville St, Manuka",d:"6 enquiries · 9 at opens"}]},
+  {lane:"Under offer",items:[{t:"16 Mildura St, Griffith",d:"$1.62m · cooling-off ends 19 Nov"}]},
+  {lane:"Exchanged",items:[{t:"3 Tasmania Cct, Forrest",d:"Settles 11 Dec"}]},
+];
+
+const agents = [
+  {n:"Chief of staff",j:"Morning brief, weekly review, answers your questions",s:"Daily 6:30am",m:"Draft",lock:false,runs:31,cost:4.10},
+  {n:"Inbox",j:"Sorts email and SMS, drafts replies in your voice",s:"Every new message",m:"Draft",lock:false,runs:412,cost:6.80},
+  {n:"Arrears",j:"Detects late rent, prepares reminders",s:"Daily 7:00am",m:"Draft",lock:false,runs:30,cost:1.20},
+  {n:"Arrears: formal notices",j:"Notice to remedy and ACAT pack",s:"When rule allows",m:"Draft",lock:true,runs:0,cost:0},
+  {n:"Maintenance",j:"Triage, quotes, trades, access, follow-up",s:"New request · 9am daily",m:"Draft",lock:false,runs:58,cost:5.40},
+  {n:"Inspections",j:"Schedule, entry notices, reports from photos",s:"Monday 7am",m:"Draft",lock:false,runs:12,cost:3.90},
+  {n:"Compliance",j:"Insulation, smoke alarms, insurance, licence",s:"Daily 6:00am",m:"Draft",lock:false,runs:30,cost:0.90},
+  {n:"Leasing",j:"Ads with disclosures, enquiries, applications",s:"New vacancy or enquiry",m:"Draft",lock:false,runs:22,cost:2.60},
+  {n:"Renewals",j:"Comparables, CPI cap, owner recommendation",s:"16 weeks before lease end",m:"Draft",lock:true,runs:4,cost:1.10},
+  {n:"Sales assistant",j:"Leads, open-home follow-up, vendor reports",s:"Friday 4pm + new leads",m:"Draft",lock:false,runs:47,cost:3.30},
+  {n:"Bookkeeper",j:"Reads bills, matches jobs, prepares payments",s:"New bill · month-end",m:"Draft",lock:true,runs:19,cost:1.40},
+  {n:"Marketing",j:"Weekly posts, emails, reels scripts",s:"Monday 8am",m:"Draft",lock:false,runs:9,cost:2.20},
+  {n:"Growth",j:"Five people to call this week, and why",s:"Wednesday",m:"Off",lock:false,runs:2,cost:0.40},
+];
+
+/* ---------- ROUTING ---------- */
+const views = [
+  ["today","Today"],["approvals","Approvals"],["portfolio","Portfolio"],["arrears","Rent & arrears"],
+  ["maintenance","Maintenance"],["compliance","Compliance"],["sales","Sales CRM"],["marketing","Marketing"],["agents","AI agents"]
+];
+function pendingCount(){return approvals.filter(a=>!a.state).length}
+function renderNav(cur){
+  $("#nav").innerHTML = views.map(([k,l])=>`<button data-v="${k}" ${k===cur?'aria-current="page"':''}><span>${l}</span>${k==="approvals"&&pendingCount()?`<span class="count">${pendingCount()}</span>`:""}</button>`).join("");
+  $("#nav").querySelectorAll("button").forEach(b=>b.onclick=()=>{location.hash=b.dataset.v});
+}
+function route(){
+  const v = (location.hash||"#today").slice(1);
+  const key = views.some(x=>x[0]===v)?v:"today";
+  renderNav(key);
+  $("#main").innerHTML = R[key]();
+  bind[key]&&bind[key]();
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange",route);
+
+function toast(msg){const t=$("#toast");t.textContent=msg;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>t.hidden=true,2400)}
+function header(eyebrow,title,extra=""){return `<div class="top"><div><div class="eyebrow">${eyebrow}</div><h1>${title}</h1></div>${extra}</div>`}
+
+/* ---------- VIEWS ---------- */
+const R = {};
+const bind = {};
+
+R.today = () => {
+  const arrearsTotal = props.reduce((s,p)=>s+p.arrears,0);
+  const managed = props.length, vacant = props.filter(p=>p.tenant==="Vacant").length;
+  const weekly = props.filter(p=>p.tenant!=="Vacant").reduce((s,p)=>s+p.rent,0);
+  const gaps = props.filter(p=>p.insul==="Unknown"||p.insul==="Not compliant").length;
+  return header("Friday 13 November 2026 · Welcome back, Tatijana","Today",
+    `<form class="ask" id="ask"><input id="askq" placeholder="Ask anything, e.g. who is behind on rent?" aria-label="Ask"><button class="btn solid" type="submit">Ask</button></form>`)
+  + `<div id="answer"></div>
+  <div class="alert"><div class="big">${daysTo(INSUL_DEADLINE)}<small>DAYS</small></div><div><strong>Ceiling insulation deadline, 30 November 2026.</strong> ${gaps} of your ${managed} properties have no evidence of compliance yet. The compliance agent has quotes and owner emails waiting for you. <a href="#compliance" style="color:var(--gold2)">Open the checklist</a></div></div>
+  <div class="grid kpis">
+    <div class="card hair kpi"><div class="label">Waiting for you</div><div class="val gold">${pendingCount()}</div><div class="sub">approvals, all drafted</div></div>
+    <div class="card kpi"><div class="label">Rent roll</div><div class="val">${money(weekly)}</div><div class="sub">per week · ${managed-vacant} leased</div></div>
+    <div class="card kpi"><div class="label">Arrears</div><div class="val" style="color:var(--red)">${money(arrearsTotal)}</div><div class="sub">2 tenancies</div></div>
+    <div class="card kpi"><div class="label">Vacancies</div><div class="val">${vacant}</div><div class="sub">18 Monaro Cres · ad drafted</div></div>
+    <div class="card kpi"><div class="label">Sales pipeline</div><div class="val">$7.9m</div><div class="sub">2 listed · 1 under offer</div></div>
+  </div>
+  <div class="gap"></div>
+  <div class="grid two">
+    <div class="card"><div class="card-head"><h2>Morning brief</h2><span class="pill gold">Chief of staff agent</span></div>
+      <div class="brief">
+        <p>Overnight the agents sorted <strong>23 emails</strong> and <strong>4 SMS</strong>, logged a <strong>hot water failure at 14 Mugga Way</strong> (treated as an urgent repair, plumber booked for 8am, tenant told), and drafted <strong>6 messages</strong> for your approval.</p>
+        <p>The three things that most need you today:</p>
+        <p>1. Approve the insulation quote for 3 Throsby St. It has to be done before 30 November.<br>2. Jordan Walsh at Franklin St is 14 days behind. A second reminder is drafted.<br>3. The Nguyen renewal at Forrest: the lease ends 18 December, and the rent increase notice needs 8 weeks unless it's a new agreement.</p>
+      </div>
+      <div class="actions"><a class="btn" href="#approvals">Review approvals</a></div>
+    </div>
+    <div class="card"><div class="card-head"><h2>Next 14 days</h2></div>
+      <div class="list">
+        ${[["red","Fri 13 Nov","Hot water repair, 14 Mugga Way · 8:00am"],["gold","Sat 14 Nov","Open home, 22 Hopetoun Cct · 11:00am"],["blue","Tue 17 Nov","Appraisal, 22 La Perouse St · 4:30pm"],["amber","Thu 19 Nov","Cooling-off ends, 16 Mildura St"],["blue","Fri 20 Nov","Routine inspection, 3 Throsby St"],["amber","Tue 24 Nov","Insulation install, 3 Throsby St (pending owner)"],["blue","Wed 25 Nov","Routine inspection, 7/22 Franklin St"]]
+          .map(([c,d,t])=>`<div class="row"><span class="dot ${c}"></span><div><div class="t">${t}</div><div class="d">${d}</div></div><span></span></div>`).join("")}
+      </div>
+    </div>
+  </div>`;
+};
+bind.today = () => {
+  $("#ask").onsubmit = e => {
+    e.preventDefault();
+    const q = $("#askq").value.toLowerCase();
+    let a = "In the full build, the chief of staff agent answers this from your live data. Try asking: who is behind on rent?";
+    if(/rent|arrear|behind|owe/.test(q)) a = "Two tenancies are behind: <strong>J. Walsh, 7/22 Franklin St, $1,160 (14 days)</strong> and <strong>T. Hughes, 3 Throsby St, $360 (3 days)</strong>. A reminder for Jordan is waiting in Approvals.";
+    else if(/insul|complian/.test(q)) a = "3 Throsby St is not compliant. 7/22 Franklin St and 9 Canterbury Cres have no evidence on file. 18 Monaro Cres and 12/40 Eyre St are exempt. Deadline 30 November 2026.";
+    else if(/vacan|lease/.test(q)) a = "One vacancy: 18 Monaro Cres, Red Hill at $880 a week. The ad is drafted with the EER and insulation statements and waiting in Approvals.";
+    $("#answer").innerHTML = `<div class="answer">${a}</div>`;
+  };
+};
+
+R.approvals = () => header("Nothing is sent until you approve it","Approvals",
+  `<div class="actions"><button class="btn ghost sm" id="bulk">Approve all routine</button></div>`) +
+  `<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(340px,1fr))">` +
+  approvals.map(a=>`<article class="approval ${a.state?'done':''}" data-id="${a.id}">
+    <div class="meta"><span class="dot ${a.urgency}"></span><strong style="color:var(--white)">${a.agent} agent</strong><span class="pill">${a.kind}</span>${a.state?`<span class="pill ${a.state==='Sent'?'green':'red'}">${a.state}</span>`:""}</div>
+    <div class="muted" style="font-size:13px">To: ${esc(a.to)}</div>
+    <div class="draft">${esc(a.text)}</div>
+    <div class="why">Why: ${esc(a.why)}<br>Rule source: ${esc(a.src)}</div>
+    ${a.state?"":`<div class="actions"><button class="btn solid sm" data-act="send">Approve and send</button><button class="btn sm" data-act="edit">Edit</button><button class="btn ghost sm" data-act="reject">Reject</button></div>`}
+  </article>`).join("") + `</div>`;
+bind.approvals = () => {
+  document.querySelectorAll(".approval").forEach(el=>{
+    const a = approvals.find(x=>x.id===el.dataset.id);
+    el.querySelectorAll("[data-act]").forEach(b=>b.onclick=()=>{
+      const act=b.dataset.act;
+      if(act==="send"){a.state="Sent";toast("Approved. In the demo nothing is actually sent.");route()}
+      if(act==="reject"){a.state="Rejected";toast("Rejected. The agent learns from the reason you give.");route()}
+      if(act==="edit"){
+        const d=el.querySelector(".draft");
+        d.outerHTML=`<textarea id="ed-${a.id}" aria-label="Edit draft">${esc(a.text)}</textarea>`;
+        b.textContent="Save";b.dataset.act="save";
+        b.onclick=()=>{a.text=$("#ed-"+a.id).value;toast("Draft saved");route()};
+      }
+    });
+  });
+  const bulk=$("#bulk"); if(bulk) bulk.onclick=()=>{let n=0;approvals.forEach(a=>{if(!a.state&&a.auto){a.state="Sent";n++}});toast(n?`${n} routine item approved`:"No routine items left");route()};
+};
+
+R.portfolio = () => header(`${props.length} properties · ${new Set(props.map(p=>p.owner)).size} owners`,"Portfolio") +
+  `<div class="card"><div class="tablewrap"><table><thead><tr><th>Property</th><th>Owner</th><th>Tenant</th><th class="num">Rent / wk</th><th>Lease ends</th><th>Next inspection</th><th>EER</th><th>Insulation</th></tr></thead><tbody>` +
+  props.map(p=>`<tr><td><strong>${p.addr}</strong></td><td>${p.owner}</td><td>${p.tenant==="Vacant"?'<span class="pill amber">Vacant</span>':p.tenant}</td><td class="num">${money(p.rent)}</td><td>${fmt(p.leaseEnd)}</td><td>${fmt(p.insp)}</td><td>${p.eer?p.eer+"★":'<span class="dim">none</span>'}</td><td>${insulPill(p.insul)}</td></tr>`).join("") +
+  `</tbody></table></div></div>`;
+function fmt(s){if(!s)return '<span class="dim">–</span>';const d=new Date(s+"T00:00");return d.toLocaleDateString("en-AU",{day:"numeric",month:"short",year:"numeric"})}
+function insulPill(s){const c=s==="Complies"?"green":s.startsWith("Exempt")?"blue":s==="Unknown"?"amber":"red";return `<span class="pill ${c}">${s}</span>`}
+
+R.arrears = () => header("Mirrored from your trust account · read-only","Rent & arrears") +
+  `<div class="grid kpis"><div class="card kpi"><div class="label">Collected this month</div><div class="val">$11,480</div><div class="sub">to 13 Nov</div></div><div class="card kpi"><div class="label">In arrears</div><div class="val" style="color:var(--red)">$1,520</div><div class="sub">5.8% of monthly roll</div></div><div class="card kpi"><div class="label">Trust ledger</div><div class="val" style="font-size:18px">PropertyMe</div><div class="sub">stays the record until your auditor signs off</div></div></div><div class="gap"></div>
+  <div class="card"><div class="card-head"><h2>Arrears cases</h2></div><div class="tablewrap"><table><thead><tr><th>Tenant</th><th>Property</th><th class="num">Owing</th><th class="num">Days</th><th>Done so far</th><th>Next step</th></tr></thead><tbody>
+  <tr><td>J. Walsh</td><td>7/22 Franklin St</td><td class="num">$1,160</td><td class="num">14</td><td>SMS reminder 1 (day 3)</td><td><span class="pill amber">Reminder 2 waiting for approval</span><div class="d dim" style="margin-top:4px">Formal notice step: locked until the ACT day count is verified and cited</div></td></tr>
+  <tr><td>T. Hughes</td><td>3 Throsby St</td><td class="num">$360</td><td class="num">3</td><td>None</td><td><span class="pill">Friendly reminder scheduled Mon</span></td></tr>
+  </tbody></table></div></div>`;
+
+R.maintenance = () => header("Tenants report in the portal, by email or SMS","Maintenance") +
+  `<div class="cols">${maint.map(l=>`<div class="lane"><h3>${l.lane}<span>${l.items.length}</span></h3>${l.items.map(i=>`<div class="tile"><strong>${i.t}</strong><span class="d">${i.p}</span><span class="pill ${i.c}" style="align-self:flex-start">${i.tag}</span></div>`).join("")}</div>`).join("")}</div>`;
+
+R.compliance = () => {
+  const rows = props.map(p=>p);
+  return header(`Insulation deadline in ${daysTo(INSUL_DEADLINE)} days`,"Compliance") +
+  `<div class="card"><div class="card-head"><h2>Ceiling insulation, by property</h2><span class="dim" style="font-size:12px">Minimum R5 where existing is below R2. Existing tenancies must comply by 30 Nov 2026. Source: act.gov.au</span></div><div class="tablewrap"><table><thead><tr><th>Property</th><th>Status</th><th>Evidence on file</th><th>Next action</th></tr></thead><tbody>` +
+  rows.map(p=>{
+    const ev = p.insul==="Complies"?"Installer receipt (R5)":p.insul.startsWith("Exempt")?"Statutory declaration":"None";
+    const nx = p.insul==="Not compliant"?"Owner approval for $2,140 quote":p.insul==="Unknown"?"Book an inspection and ask owner for records":"None";
+    return `<tr><td>${p.addr}</td><td>${insulPill(p.insul)}</td><td>${ev}</td><td>${nx}</td></tr>`}).join("") +
+  `</tbody></table></div></div><div class="gap"></div>
+  <div class="card"><div class="card-head"><h2>Other dates</h2></div><div class="list">
+  ${[["amber","Landlord insurance, 9 Canterbury Cres","Expires 2 Dec · owner reminded"],["green","Smoke alarms, all properties","Serviced within 12 months"],["blue","Trust account audit","Lodge by 30 Sep 2027 · auditor booked"],["green","Agent licence","Renewal due Jun 2027"],["amber","Professional indemnity insurance","Renews 1 Jan 2027"]].map(([c,t,d])=>`<div class="row"><span class="dot ${c}"></span><div><div class="t">${t}</div><div class="d">${d}</div></div><span></span></div>`).join("")}
+  </div></div>`;
+};
+
+R.sales = () => header("Sales pipeline · $7.9m","Sales CRM") +
+  `<div class="cols">${pipeline.map(l=>`<div class="lane"><h3>${l.lane}<span>${l.items.length}</span></h3>${l.items.map(i=>`<div class="tile"><strong>${i.t}</strong><span class="d">${i.d}</span></div>`).join("")}</div>`).join("")}</div><div class="gap"></div>
+  <div class="card"><div class="card-head"><h2>Vendor report preview, 22 Hopetoun Cct</h2><span class="pill gold">Sales agent · Friday 4pm</span></div>
+  <div class="grid kpis"><div class="kpi"><div class="label">Portal views</div><div class="val">2,184</div></div><div class="kpi"><div class="label">Enquiries</div><div class="val">14</div></div><div class="kpi"><div class="label">Open-home groups</div><div class="val">31</div></div><div class="kpi"><div class="label">Contracts out</div><div class="val">4</div></div></div>
+  <div style="margin-top:12px"><div class="d dim" style="font-size:12px;margin-bottom:6px">Campaign progress, week 3 of 4</div><div class="bar"><i style="width:75%"></i></div></div></div>`;
+
+R.marketing = () => header("This week's plan · drafted Monday 8am","Marketing") +
+  `<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">` +
+  [["FOR LEASE · 18 MONARO CRES","Instagram + Facebook · Mon","Ad includes EER 2.5★ and the insulation exemption statement."],
+   ["JUST SOLD · 3 TASMANIA CCT","Instagram reel script · Wed","Short walkthrough with the sale result and a thank-you to the vendors."],
+   ["CANBERRA INNER SOUTH · NOVEMBER","Email to 412 contacts · Thu","Suburb market update: Red Hill, Griffith, Forrest, Kingston. Only contacts who opted in."],
+   ["5 REVIEWS · RATEMYAGENT","Review requests · Fri","Sent to clients who settled or signed a lease in the last 30 days."]]
+  .map(([h,w,d])=>`<div class="post"><div class="img"><span>${h}</span></div><div class="body"><span class="pill gold" style="align-self:flex-start">${w}</span><span class="muted">${d}</span><div class="actions"><a class="btn sm" href="#approvals">Review</a></div></div></div>`).join("") + `</div>`;
+
+R.agents = () => {
+  const total = agents.reduce((s,a)=>s+a.cost,0);
+  return header(`AI running cost this month: ${money(Math.round(total))} (demo)`,"AI agents") +
+  `<p class="muted" style="max-width:68ch;margin:-6px 0 18px">Each agent has a switch. Everything starts at <strong style="color:var(--gold2)">Draft</strong>, so you approve it first. Locked items (legal notices, money and rent increases) can never be set to send automatically.</p>
+  <div class="card"><div class="tablewrap"><table><thead><tr><th>Agent</th><th>What it does</th><th>Runs</th><th class="num">Runs this month</th><th class="num">Cost</th><th>Mode</th></tr></thead><tbody>` +
+  agents.map((a,i)=>`<tr><td><strong>${a.n}</strong></td><td class="muted">${a.j}</td><td>${a.s}</td><td class="num">${a.runs}</td><td class="num">$${a.cost.toFixed(2)}</td><td><div class="toggle" role="group" aria-label="${a.n} mode">${["Off","Draft","Auto"].map(m=>`<button data-i="${i}" data-m="${m}" aria-pressed="${a.m===m}" ${a.lock&&m==="Auto"?'disabled title="Never automatic: legal or money"':''}>${m}</button>`).join("")}</div></td></tr>`).join("") +
+  `</tbody></table></div></div>`;
+};
+bind.agents = () => document.querySelectorAll(".toggle button").forEach(b=>b.onclick=()=>{const a=agents[b.dataset.i];a.m=b.dataset.m;toast(`${a.n}: ${a.m==="Auto"?"sends automatically":a.m==="Draft"?"drafts for your approval":"switched off"}`);route()});
+
+route();
+</script>
